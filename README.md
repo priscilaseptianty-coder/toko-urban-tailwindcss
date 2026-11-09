@@ -1,6 +1,6 @@
-# Toko Urban — Modern Urban E-Commerce Website (Tailwind CSS v4)
+# Kila Wonderland — Modern E-Commerce Website (Tailwind CSS v4)
 
-Website e-commerce katalog produk modern untuk **Toko Urban** — *"Teman nyaman untuk langkah sehari-hari."* Dirancang dengan estetika D2C (*Direct-to-Consumer*) masa kini bernuansa **Pink Muda Pastel & Putih**, dibangun menggunakan **HTML5 Semantik**, **Tailwind CSS v4 (CSS-First `@theme`)**, serta **Vanilla JavaScript** tanpa ketergantungan framework berat.
+Website e-commerce katalog produk modern untuk **Kila Wonderland** — *"Teman nyaman untuk langkah sehari-hari."* Dirancang dengan estetika D2C (*Direct-to-Consumer*) masa kini bernuansa **Pink Muda Pastel & Putih**, dibangun menggunakan **HTML5 Semantik**, **Tailwind CSS v4 (CSS-First `@theme`)**, serta **Vanilla JavaScript** tanpa ketergantungan framework berat.
 
 ---
 
@@ -9,17 +9,17 @@ Website e-commerce katalog produk modern untuk **Toko Urban** — *"Teman nyaman
 1. **Framework Modern: Tailwind CSS v4**:
    - Dikonfigurasi menggunakan standar **Tailwind CSS v4 CSS-First** dengan direktif `@theme` di [`style.css`](style.css) tanpa memerlukan file `tailwind.config.js`.
    - Menggunakan utilitas kelas modern untuk Flexbox, CSS Grid, transisi, dan warna dinamis.
-   - Dilengkapi script `@tailwindcss/browser@4` untuk pratinjau instan (*zero build*) dan dukungan kompilasi standalone `@tailwindcss/cli`.
+   - Menggunakan file terkompilasi [`dist/output.css`](dist/output.css) untuk performa instan dan dukungan offline 100%.
 
 2. **Tipografi Modern (*Plus Jakarta Sans*) & 100% Ikon Vektor SVG**:
    - Menggunakan Google Font kurasi *Plus Jakarta Sans* untuk tampilan tipografi yang bersih, elegan, dan profesional.
    - Seluruh simbol visual (bintang rating, lencana produk, tab ulasan, metode pembayaran, ekspedisi, keranjang belanja, dan keamanan footer) menggunakan **ikon vektor SVG inline murni**, bebas dari emoji sistem sehingga konsisten dan tajam di semua resolusi layar.
 
 3. **Top Announcement Bar**:
-   - Baris pengumuman promosi di atas navbar dengan kode voucher: `Flash Sale: Diskon s/d 25% + Bebas Ongkir se-Indonesia! Kode: URBANPINK`.
+   - Baris pengumuman promosi di atas navbar dengan kode voucher: `Flash Sale: Diskon s/d 25% + Bebas Ongkir se-Indonesia! Kode: KILAPINK`.
 
 4. **Header Sticky & Keranjang Belanja Cepat**:
-   - Logo Toko Urban dengan aksen kilau (*sparkle*).
+   - Logo Kila Wonderland dengan aksen kilau (*sparkle*).
    - Tombol pemicu **Keranjang Belanja (`🛒`)** lengkap dengan *badge counter* jumlah barang otomatis.
    - Menu hamburger interaktif untuk navigasi di layar ponsel.
 
@@ -31,22 +31,22 @@ Website e-commerce katalog produk modern untuk **Toko Urban** — *"Teman nyaman
    - Foto studio komersial beresolusi tinggi bernuansa pink pastel lembut.
    - **Badge Diskon & Status:** `-25% OFF`, `Best Seller`, `-22% OFF`, `New Arrival`.
    - **Harga Promo & Coret:**
-     - Sepatu Urban: `~Rp399.000~` **Rp299.000** *(Hemat Rp100.000)*
-     - Tas Ransel Urban: `~Rp449.000~` **Rp349.000** *(Hemat Rp100.000)*
+     - Sepatu Kila: `~Rp399.000~` **Rp299.000** *(Hemat Rp100.000)*
+     - Tas Ransel Kila: `~Rp449.000~` **Rp349.000** *(Hemat Rp100.000)*
    - Tombol ganda: **+ Keranjang** (menambah barang langsung) dan **Lihat Detail** (menuju halaman spesifikasi).
 
 7. **Slide-In Cart Drawer & Checkout WhatsApp Otomatis**:
    - Keranjang belanja meluncur mulus dari sisi kanan layar (*slide-in drawer*).
    - Kontrol kuantitas produk instan (`−`, jumlah, `+`) dan tombol hapus produk.
    - Penghitungan subtotal dan total harga secara dinamis.
-   - Tombol **"Pesan via WhatsApp Sekarang"** yang otomatis menghasilkan tautan chat WhatsApp dengan format rincian pesanan rapi (nama barang, varian, jumlah, dan total harga).
+   - Form data pengiriman lengkap (Nama, WhatsApp, Alamat, Ekspedisi, Pembayaran) yang otomatis menghasilkan pesan pemesanan rapi ke WhatsApp CS.
 
 8. **Ulasan Pembeli Berbasis Tab Interaktif**:
-   - Beralih dengan mudah antara ulasan **Sepatu Urban (148 Ulasan)** dan **Tas Ransel Urban (96 Ulasan)** tanpa me-reload halaman.
+   - Beralih dengan mudah antara ulasan **Sepatu Kila (148 Ulasan)** dan **Tas Ransel Kila (96 Ulasan)** tanpa me-reload halaman.
    - Kartu ulasan lengkap dengan avatar inisial, rating bintang emas, lencana *"Pembeli Terverifikasi"*, varian barang, dan waktu ulasan.
 
 9. **Trust Signals (Metode Pembayaran & Logistik)**:
-   - Deretan lencana resmi: **BCA, Mandiri, QRIS, GoPay, OVO, Bayar di Tempat (COD)**.
+   - Deretan lencana resmi: **BCA, Mandiri, BRI, QRIS, GoPay, OVO, ShopeePay, Bayar di Tempat (COD)**.
    - Mitra ekspedisi terpercaya: **J&T Express, SiCepat, JNE, GoSend**.
 
 10. **Halaman Detail Produk Lengkap**:
@@ -62,17 +62,19 @@ Website e-commerce katalog produk modern untuk **Toko Urban** — *"Teman nyaman
 ## 📁 Struktur Berkas Proyek
 
 ```text
-TOKO URBAN TAILWAINDCSS/
-├── index.html                     # Halaman katalog utama dengan Tailwind CSS v4
-├── detail-produk.html             # Halaman detail produk Sepatu Urban Pink Pastel
-├── detail-tas.html                # Halaman detail produk Tas Ransel Urban Pink Pastel
+kila-wonderland-tailwindcss/
+├── index.html                     # Halaman katalog utama Kila Wonderland
+├── detail-produk.html             # Halaman detail produk Sepatu Kila Wonderland Pink Pastel
+├── detail-tas.html                # Halaman detail produk Tas Ransel Kila Wonderland Pink Pastel
 ├── style.css                      # Konfigurasi Tailwind CSS v4 (@import "tailwindcss" & @theme)
 ├── script.js                      # Logika interaktif Vanilla JS (Cart State, WhatsApp Checkout, Drawer, Tabs)
 ├── package.json                   # Script build Tailwind CLI (dev & build)
-├── PROMPT_MIGRATION_TAILWIND_V4.md # Dokumentasi prompt migrasi untuk AI Agent
+├── vercel.json                    # Konfigurasi deployment hosting Vercel
+├── dist/
+│   └── output.css                 # File stylesheet produksi Tailwind CSS v4
 ├── images/
-│   ├── sepatu-urban.jpg           # Foto produk studio komersial Sepatu Urban
-│   └── tas-ransel.jpg             # Foto produk studio komersial Tas Ransel Urban
+│   ├── sepatu-urban.jpg           # Foto produk studio komersial Sepatu Kila
+│   └── tas-ransel.jpg             # Foto produk studio komersial Tas Ransel Kila
 └── README.md                      # Dokumentasi lengkap proyek
 ```
 

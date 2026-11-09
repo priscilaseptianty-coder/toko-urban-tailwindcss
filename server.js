@@ -1,5 +1,5 @@
 // ==========================================================================
-// Toko Urban - Local Static Web Server (Node.js Zero Dependency)
+// Kila Wonderland - Local Static Web Server (Node.js Zero Dependency)
 // ==========================================================================
 
 const http = require('http');
@@ -68,7 +68,7 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(PORT, '127.0.0.1', () => {
-  console.log(`Toko Urban Dev Server running at: http://localhost:${PORT}`);
+  console.log(`Kila Wonderland Dev Server running at: http://localhost:${PORT}`);
   console.log(`Open in browser: http://127.0.0.1:${PORT}`);
 });
 

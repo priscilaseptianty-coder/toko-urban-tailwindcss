@@ -1,17 +1,17 @@
 // ==========================================================================
-// Toko Urban - E-Commerce Core & Interactivity (Tailwind CSS v4 Compatible)
+// Kila Wonderland - E-Commerce Core & Interactivity (Tailwind CSS v4 Compatible)
 // ==========================================================================
 
 document.addEventListener('DOMContentLoaded', () => {
   // ------------------------------------------------------------------------
   // 1. Storage Keys & State
   // ------------------------------------------------------------------------
-  const CART_STORAGE_KEY = 'toko_urban_cart';
-  const CUSTOMER_STORAGE_KEY = 'toko_urban_customer';
+  const CART_STORAGE_KEY = 'kila_wonderland_cart';
+  const CUSTOMER_STORAGE_KEY = 'kila_wonderland_customer';
 
   let cart = [];
   try {
-    const savedCart = localStorage.getItem(CART_STORAGE_KEY);
+    const savedCart = localStorage.getItem(CART_STORAGE_KEY) || localStorage.getItem('toko_urban_cart');
     if (savedCart) {
       cart = JSON.parse(savedCart);
     }
@@ -359,9 +359,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const totalPrice = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
 
       // Construct professional WhatsApp message
-      let waMsg = `*FORM PEMESANAN RESMI TOKO URBAN*%0A`;
+      let waMsg = `*FORM PEMESANAN RESMI KILA WONDERLAND*%0A`;
       waMsg += `==============================%0A%0A`;
-      waMsg += `*Halo CS Toko Urban! Saya ingin memesan produk berikut:*%0A%0A`;
+      waMsg += `*Halo CS Kila Wonderland! Saya ingin memesan produk berikut:*%0A%0A`;
 
       cart.forEach((item, idx) => {
         waMsg += `${idx + 1}. *${item.name}*%0A`;
@@ -433,7 +433,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (buyWaButton) {
         const title = document.querySelector('.detail-title')?.textContent.trim() || 'Produk';
         const price = document.querySelector('.detail-price')?.textContent.trim() || '';
-        const msg = `Halo Toko Urban, saya ingin memesan *${title}* varian *${selectedOption}* seharga *${price}*. Apakah stok masih tersedia?`;
+        const msg = `Halo Kila Wonderland, saya ingin memesan *${title}* varian *${selectedOption}* seharga *${price}*. Apakah stok masih tersedia?`;
         buyWaButton.href = `https://wa.me/6281234567890?text=${encodeURIComponent(msg)}`;
       }
     });

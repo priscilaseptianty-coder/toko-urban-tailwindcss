@@ -1,7 +1,7 @@
 {
-  "name": "toko-urban-tailwindcss",
+  "name": "kila-wonderland-tailwindcss",
   "version": "1.0.0",
-  "description": "Toko Urban Modern E-Commerce Catalog with Tailwind CSS v4",
+  "description": "Kila Wonderland Modern E-Commerce Catalog with Tailwind CSS v4",
   "scripts": {
     "start": "node server.js",
     "dev": "npx @tailwindcss/cli -i style.css -o dist/output.css --watch",
