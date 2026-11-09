@@ -1,0 +1,167 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+/* ==========================================================================
+   Tailwind CSS v4 Configuration (@theme) - Toko Urban
+   ========================================================================== */
+@theme {
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Toko Urban Palette: Pastel Pink & Clean White */
+  --color-brand-primary: #d85d85;
+  --color-brand-primary-hover: #be4b73;
+  --color-brand-primary-light: #fce7f3;
+  --color-brand-primary-border: #fbcfe8;
+  --color-brand-primary-subtle: #fdf2f8;
+
+  --color-brand-text-main: #381423;
+  --color-brand-text-secondary: #6b535d;
+  --color-brand-text-muted: #8c6b79;
+
+  --color-brand-bg-body: #fff5f7;
+  --color-brand-bg-card: #ffffff;
+  --color-brand-bg-dark: #381423;
+
+  --color-brand-success: #10b981;
+  --color-brand-warning: #f59e0b;
+
+  /* Toko Urban Shadows */
+  --shadow-subtle: 0 2px 6px rgba(56, 20, 35, 0.04);
+  --shadow-card: 0 10px 25px -5px rgba(216, 93, 133, 0.1), 0 8px 10px -6px rgba(56, 20, 35, 0.04);
+  --shadow-hover: 0 20px 30px -10px rgba(216, 93, 133, 0.2);
+}
+
+/* Base Document Styles */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--color-brand-text-main);
+  background-color: var(--color-brand-bg-body);
+  margin: 0;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background-color: var(--color-brand-primary-light);
+  color: var(--color-brand-primary);
+}
+
+/* ==========================================================================
+   Interactive State Helpers & Utilities
+   ========================================================================== */
+
+/* Cart Drawer Slide & Overlay */
+.cart-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(56, 20, 35, 0.45);
+  backdrop-filter: blur(4px);
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cart-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.cart-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  max-width: 440px;
+  background-color: #ffffff;
+  box-shadow: -10px 0 35px rgba(56, 20, 35, 0.15);
+  display: flex;
+  flex-direction: column;
+  z-index: 101;
+  transform: translateX(100%);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cart-overlay.open .cart-drawer {
+  transform: translateX(0);
+}
+
+/* Mobile Navbar Toggle */
+@media (max-width: 767px) {
+  .navbar-mobile-menu {
+    display: none;
+  }
+  .navbar-mobile-menu.open {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: #ffffff;
+    border-bottom: 1px solid #fbcfe8;
+    box-shadow: 0 10px 25px rgba(56, 20, 35, 0.08);
+    padding: 1.25rem;
+    gap: 1rem;
+    z-index: 45;
+    animation: fadeInMenu 0.25s ease-out;
+  }
+}
+
+@keyframes fadeInMenu {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Hamburger active transformation */
+.menu-toggle.active .bar-top {
+  transform: translateY(6px) rotate(45deg);
+}
+.menu-toggle.active .bar-mid {
+  opacity: 0;
+}
+.menu-toggle.active .bar-bot {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+/* Active State for Review Tabs & Size Buttons */
+.tab-btn.active {
+  background-color: var(--color-brand-primary) !important;
+  color: #ffffff !important;
+  border-color: var(--color-brand-primary) !important;
+  box-shadow: 0 4px 12px rgba(216, 93, 133, 0.3) !important;
+}
+
+.tab-panel {
+  display: none;
+}
+.tab-panel.active {
+  display: block;
+  animation: fadeInPanel 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fadeInPanel {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.size-btn.active {
+  background-color: var(--color-brand-primary) !important;
+  color: #ffffff !important;
+  border-color: var(--color-brand-primary) !important;
+  box-shadow: 0 4px 10px rgba(216, 93, 133, 0.25) !important;
+}
+
+/* Purchase Feedback */
+.purchase-feedback {
+  display: none;
+}
+.purchase-feedback.show {
+  display: block;
+}
