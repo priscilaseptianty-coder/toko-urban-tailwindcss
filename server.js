@@ -55,6 +55,24 @@ for (const cand of jsCandidates) {
   } catch (e) {}
 }
 
+// Pre-load HTML files into memory
+const htmlCache = {};
+const htmlFiles = ['index.html', 'detail-produk.html', 'detail-tas.html'];
+for (const file of htmlFiles) {
+  const candidates = [
+    path.join(__dirname, file),
+    path.join(process.cwd(), file),
+  ];
+  for (const c of candidates) {
+    try {
+      if (fs.existsSync(c)) {
+        htmlCache[file] = fs.readFileSync(c, 'utf8');
+        break;
+      }
+    } catch (e) {}
+  }
+}
+
 function resolveExistingFile(reqPath) {
   const candidates = [
     path.join(__dirname, reqPath),
@@ -80,6 +98,26 @@ const server = http.createServer((req, res) => {
   let reqPath = decodeURI(req.url.split('?')[0]);
   if (reqPath === '/' || reqPath === '') {
     reqPath = '/index.html';
+  }
+
+  const cleanReq = reqPath.replace(/^\//, '');
+
+  // Fast path for HTML files
+  if (htmlCache[cleanReq]) {
+    res.writeHead(200, {
+      'Content-Type': 'text/html; charset=utf-8',
+      'Cache-Control': 'no-cache',
+    });
+    res.end(htmlCache[cleanReq]);
+    return;
+  }
+  if (htmlCache[cleanReq + '.html']) {
+    res.writeHead(200, {
+      'Content-Type': 'text/html; charset=utf-8',
+      'Cache-Control': 'no-cache',
+    });
+    res.end(htmlCache[cleanReq + '.html']);
+    return;
   }
 
   // Fast path for CSS (dist/output.css, output.css, style.css)

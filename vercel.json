@@ -4,7 +4,14 @@
   "outputDirectory": ".",
   "functions": {
     "server.js": {
-      "includeFiles": "dist/**, output.css, images/**, *.html, *.css, *.js"
+      "includeFiles": [
+        "dist/**",
+        "output.css",
+        "images/**",
+        "*.html",
+        "*.css",
+        "*.js"
+      ]
     }
   }
 }
