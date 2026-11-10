@@ -1,0 +1,10 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "npm run build",
+  "outputDirectory": ".",
+  "functions": {
+    "server.js": {
+      "includeFiles": "dist/**, output.css, images/**, *.html, *.css, *.js"
+    }
+  }
+}

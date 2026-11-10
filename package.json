@@ -3,11 +3,12 @@
   "version": "1.0.0",
   "description": "Kila Wonderland Modern E-Commerce Catalog with Tailwind CSS v4",
   "scripts": {
+    "start": "node server.js",
     "dev": "npx @tailwindcss/cli -i style.css -o dist/output.css --watch",
-    "build:css": "npx @tailwindcss/cli -i style.css -o dist/output.css --minify",
-    "serve": "node local-server.js"
+    "build": "npx @tailwindcss/cli -i style.css -o dist/output.css --minify && cp dist/output.css output.css",
+    "serve": "node server.js"
   },
-  "devDependencies": {
+  "dependencies": {
     "@tailwindcss/cli": "^4.0.0",
     "tailwindcss": "^4.0.0"
   }
