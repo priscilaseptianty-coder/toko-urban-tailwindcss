@@ -7,176 +7,124 @@ const fs = require('fs');
 const path = require('path');
 
 const PORT = process.env.PORT || 3000;
-const ROOT_DIR = __dirname;
 
-const MIME_TYPES = {
-  '.html': 'text/html; charset=utf-8',
-  '.css': 'text/css; charset=utf-8',
-  '.js': 'application/javascript; charset=utf-8',
-  '.json': 'application/json; charset=utf-8',
-  '.svg': 'image/svg+xml',
-  '.jpg': 'image/jpeg',
-  '.jpeg': 'image/jpeg',
-  '.png': 'image/png',
-  '.webp': 'image/webp',
-  '.ico': 'image/x-icon',
+// Explicit string literals so Vercel NFT (Node File Trace) bundles all files
+const staticRegistry = {
+  '/index.html': {
+    contentType: 'text/html; charset=utf-8',
+    isHtml: true,
+    load: () => fs.readFileSync(path.join(__dirname, 'index.html'), 'utf8'),
+  },
+  '/detail-produk.html': {
+    contentType: 'text/html; charset=utf-8',
+    isHtml: true,
+    load: () => fs.readFileSync(path.join(__dirname, 'detail-produk.html'), 'utf8'),
+  },
+  '/detail-tas.html': {
+    contentType: 'text/html; charset=utf-8',
+    isHtml: true,
+    load: () => fs.readFileSync(path.join(__dirname, 'detail-tas.html'), 'utf8'),
+  },
+  '/dist/output.css': {
+    contentType: 'text/css; charset=utf-8',
+    load: () => fs.readFileSync(path.join(__dirname, 'dist', 'output.css'), 'utf8'),
+  },
+  '/output.css': {
+    contentType: 'text/css; charset=utf-8',
+    load: () => fs.readFileSync(path.join(__dirname, 'output.css'), 'utf8'),
+  },
+  '/style.css': {
+    contentType: 'text/css; charset=utf-8',
+    load: () => fs.readFileSync(path.join(__dirname, 'style.css'), 'utf8'),
+  },
+  '/script.js': {
+    contentType: 'application/javascript; charset=utf-8',
+    load: () => fs.readFileSync(path.join(__dirname, 'script.js'), 'utf8'),
+  },
+  '/images/sepatu-urban.jpg': {
+    contentType: 'image/jpeg',
+    load: () => fs.readFileSync(path.join(__dirname, 'images', 'sepatu-urban.jpg')),
+  },
+  '/images/sepatu-urban.svg': {
+    contentType: 'image/svg+xml',
+    load: () => fs.readFileSync(path.join(__dirname, 'images', 'sepatu-urban.svg')),
+  },
+  '/images/tas-ransel.jpg': {
+    contentType: 'image/jpeg',
+    load: () => fs.readFileSync(path.join(__dirname, 'images', 'tas-ransel.jpg')),
+  },
+  '/images/tas-ransel.svg': {
+    contentType: 'image/svg+xml',
+    load: () => fs.readFileSync(path.join(__dirname, 'images', 'tas-ransel.svg')),
+  },
 };
 
-// Pre-load CSS into memory so it is ALWAYS available immediately
-let cachedCSS = '';
-const cssCandidates = [
-  path.join(__dirname, 'dist', 'output.css'),
-  path.join(__dirname, 'output.css'),
-  path.join(process.cwd(), 'dist', 'output.css'),
-  path.join(process.cwd(), 'output.css'),
-  path.join(__dirname, 'style.css'),
-];
-for (const cand of cssCandidates) {
+// Pre-load all assets into memory at startup
+const memoryCache = {};
+for (const [route, entry] of Object.entries(staticRegistry)) {
   try {
-    if (fs.existsSync(cand)) {
-      cachedCSS = fs.readFileSync(cand, 'utf8');
-      if (cachedCSS && cachedCSS.length > 500) break;
-    }
-  } catch (e) {}
-}
-
-// Pre-load JS into memory
-let cachedJS = '';
-const jsCandidates = [
-  path.join(__dirname, 'script.js'),
-  path.join(process.cwd(), 'script.js'),
-];
-for (const cand of jsCandidates) {
-  try {
-    if (fs.existsSync(cand)) {
-      cachedJS = fs.readFileSync(cand, 'utf8');
-      if (cachedJS && cachedJS.length > 50) break;
-    }
-  } catch (e) {}
-}
-
-// Pre-load HTML files into memory
-const htmlCache = {};
-const htmlFiles = ['index.html', 'detail-produk.html', 'detail-tas.html'];
-for (const file of htmlFiles) {
-  const candidates = [
-    path.join(__dirname, file),
-    path.join(process.cwd(), file),
-  ];
-  for (const c of candidates) {
-    try {
-      if (fs.existsSync(c)) {
-        htmlCache[file] = fs.readFileSync(c, 'utf8');
-        break;
-      }
-    } catch (e) {}
+    memoryCache[route] = {
+      content: entry.load(),
+      contentType: entry.contentType,
+      isHtml: !!entry.isHtml,
+    };
+  } catch (err) {
+    // If not found at direct path, try fallback
   }
 }
 
-function resolveExistingFile(reqPath) {
-  const candidates = [
-    path.join(__dirname, reqPath),
-    path.join(process.cwd(), reqPath),
-    path.join(__dirname, 'dist', path.basename(reqPath)),
-    path.join(process.cwd(), 'dist', path.basename(reqPath)),
-    path.join(__dirname, 'images', path.basename(reqPath)),
-    path.join(process.cwd(), 'images', path.basename(reqPath)),
-  ];
-
-  for (const c of candidates) {
-    try {
-      if (fs.existsSync(c) && fs.statSync(c).isFile()) {
-        return c;
-      }
-    } catch (e) {}
-  }
-  return null;
+// Ensure output.css and dist/output.css share content if one was loaded
+if (!memoryCache['/dist/output.css'] && memoryCache['/output.css']) {
+  memoryCache['/dist/output.css'] = memoryCache['/output.css'];
+}
+if (!memoryCache['/output.css'] && memoryCache['/dist/output.css']) {
+  memoryCache['/output.css'] = memoryCache['/dist/output.css'];
 }
 
 const server = http.createServer((req, res) => {
-  // Normalize URL and remove query strings
   let reqPath = decodeURI(req.url.split('?')[0]);
   if (reqPath === '/' || reqPath === '') {
     reqPath = '/index.html';
   }
 
-  const cleanReq = reqPath.replace(/^\//, '');
+  // Check direct match in memory cache
+  let asset = memoryCache[reqPath];
 
-  // Fast path for HTML files
-  if (htmlCache[cleanReq]) {
+  // Check clean URLs (e.g. /detail-produk -> /detail-produk.html)
+  if (!asset && memoryCache[reqPath + '.html']) {
+    asset = memoryCache[reqPath + '.html'];
+  }
+
+  // Check CSS variations (e.g. any .css request for output.css)
+  if (!asset && reqPath.endsWith('output.css')) {
+    asset = memoryCache['/dist/output.css'] || memoryCache['/output.css'];
+  }
+
+  // Check script.js variation
+  if (!asset && reqPath.endsWith('script.js')) {
+    asset = memoryCache['/script.js'];
+  }
+
+  // If found in cache, serve immediately
+  if (asset) {
     res.writeHead(200, {
-      'Content-Type': 'text/html; charset=utf-8',
-      'Cache-Control': 'no-cache',
+      'Content-Type': asset.contentType,
+      'Cache-Control': asset.isHtml ? 'no-cache' : 'public, max-age=86400, immutable',
     });
-    res.end(htmlCache[cleanReq]);
+    res.end(asset.content);
     return;
   }
-  if (htmlCache[cleanReq + '.html']) {
-    res.writeHead(200, {
-      'Content-Type': 'text/html; charset=utf-8',
-      'Cache-Control': 'no-cache',
-    });
-    res.end(htmlCache[cleanReq + '.html']);
-    return;
-  }
 
-  // Fast path for CSS (dist/output.css, output.css, style.css)
-  if (reqPath.endsWith('.css')) {
-    const existingCss = resolveExistingFile(reqPath);
-    let cssBody = '';
-    if (existingCss) {
-      try {
-        cssBody = fs.readFileSync(existingCss, 'utf8');
-      } catch (e) {}
-    }
-    if (!cssBody) {
-      cssBody = cachedCSS;
-    }
-    if (cssBody) {
-      res.writeHead(200, {
-        'Content-Type': 'text/css; charset=utf-8',
-        'Cache-Control': 'public, max-age=3600',
-      });
-      res.end(cssBody);
-      return;
-    }
-  }
-
-  // Fast path for script.js
-  if (reqPath.endsWith('script.js')) {
-    const existingJs = resolveExistingFile(reqPath);
-    let jsBody = '';
-    if (existingJs) {
-      try {
-        jsBody = fs.readFileSync(existingJs, 'utf8');
-      } catch (e) {}
-    }
-    if (!jsBody) {
-      jsBody = cachedJS;
-    }
-    if (jsBody) {
-      res.writeHead(200, {
-        'Content-Type': 'application/javascript; charset=utf-8',
-        'Cache-Control': 'public, max-age=3600',
-      });
-      res.end(jsBody);
-      return;
-    }
-  }
-
-  // Resolve file on filesystem
-  const resolvedPath = resolveExistingFile(reqPath);
-  if (resolvedPath) {
-    const ext = path.extname(resolvedPath).toLowerCase();
-    const contentType = MIME_TYPES[ext] || 'application/octet-stream';
-
+  // Fallback: check filesystem directly
+  const directPath = path.join(__dirname, reqPath);
+  if (fs.existsSync(directPath) && fs.statSync(directPath).isFile()) {
+    const ext = path.extname(directPath).toLowerCase();
+    const contentType = staticRegistry[reqPath]?.contentType || 'application/octet-stream';
     res.writeHead(200, {
       'Content-Type': contentType,
-      'Cache-Control': ext === '.html' ? 'no-cache' : 'public, max-age=86400',
+      'Cache-Control': 'no-cache',
     });
-
-    const readStream = fs.createReadStream(resolvedPath);
-    readStream.pipe(res);
+    fs.createReadStream(directPath).pipe(res);
     return;
   }
 
@@ -194,7 +142,6 @@ const server = http.createServer((req, res) => {
   `);
 });
 
-// Support both standalone Node.js and Vercel Serverless Function
 if (require.main === module) {
   server.listen(PORT, '127.0.0.1', () => {
     console.log(`Kila Wonderland Server running at: http://localhost:${PORT}`);
